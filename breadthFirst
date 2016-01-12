@@ -15,6 +15,23 @@ public class breadthFirst {
 		
 		bfSearch(q);
 	}
+		
+	/*returns true if there are repeats, false if not
+	 *helper method to check for repeat
+	 */
+	private static boolean checkRepeat(puzzleNode p) {
+		boolean repeat = false;
+		puzzleNode check = p;
+		
+		while(p.getParent() != null && !repeat) {
+			if(p.getParent().getPuzzle().equals(check.getPuzzle())) {
+				repeat = true;
+			}
+			p = p.getParent();
+		}
+		
+		return repeat;
+	}
 	
 	public static void bfSearch(Queue<puzzleNode> q) {
 		//to count number of iterations it takes
@@ -64,29 +81,12 @@ public class breadthFirst {
 					if (!checkRepeat(newPNode)) //if repeat, then don't add it
 						q.add(newPNode);
 				}
-			//quit if it reaches 10000 iterations
-			if (searchCount > 10000) {
-				System.out.println("Solution path is too long to handle");
-				System.exit(0);
-			}
-	   	  }
+				//quit if it reaches 10000 iterations
+				if (searchCount > 10000) {
+					System.out.println("Solution path is too long to handle");
+					System.exit(0);
+				}
+		 	}
 		}
-	}
-	
-	/*returns true if there are repeats, false if not
-	 *helper method to check for repeat
-	 */
-	private static boolean checkRepeat(puzzleNode p) {
-		boolean repeat = false;
-		puzzleNode check = p;
-		
-		while(p.getParent() != null && !repeat) {
-			if(p.getParent().getPuzzle().equals(check.getPuzzle())) {
-				repeat = true;
-			}
-			p = p.getParent();
-		}
-		
-		return repeat;
 	}
 }
