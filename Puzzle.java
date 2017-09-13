@@ -6,6 +6,11 @@ public class Puzzle {
 
 	private int[] goal = {0, 1, 2, 3, 4, 5, 6 ,7, 8};
 	private int[] current;
+    private int blankLoc;
+    
+    public enum Diection {
+        LEFT, RIGHT, UP, DOWN;
+    }
 	
 	public Puzzle() {
 		current = goal;
@@ -49,6 +54,31 @@ public class Puzzle {
 			}
 		}
 	}
+    
+    /*move the blank tile up, down, left, right */
+    public void move(Direction d) {
+        
+    }
+    
+    /*returns -1 if no 0 in the array
+     *meaning there is an error somewhere since
+     *there should always be a 0
+     */
+    private void setBlank() {
+        int location = -1;
+        for(int i = 0; i < current.length; i++) {
+            if (current[i] == 0)
+                location = i;
+        }
+        blankLoc = location;
+    }
+    
+    //swaps the two elements at a and b in the array of p
+    private void moveBlank(int a, int b) {
+        int temp = getCurrent()[a];
+        getCurrent()[a] = getCurrent()[b];
+        getCurrent()[b] = temp;
+    }
 	
 	/*returns a random direction, depending on location
 	 * if location == 0, returns Up if it is a possible move
@@ -157,13 +187,6 @@ public class Puzzle {
 			}
 		}
 		return "Incorrect input";
-	}
-		
-	//swaps the two elements at a and b in the array of p
-	private void moveBlank(int a, int b) {
-			int temp = getCurrent()[a];
-			getCurrent()[a] = getCurrent()[b];
-			getCurrent()[b] = temp;
 	}
 	
 	public ArrayList<Puzzle> getNextPuzzles() {
