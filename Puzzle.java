@@ -7,12 +7,15 @@ public class Puzzle {
 	private int[] goal = {0, 1, 2, 3, 4, 5, 6 ,7, 8};
 	private int[] current;
 	
-	public Puzzle(int[] array) {
-		current = array;
+	public Puzzle() {
+		current = goal;
 	}
 	
+    public setState(int[] state) {
+        current = state;
+    }
 	//randomizes the puzzle with n moves
-	public void randomize(int n) {
+	public void randomizeState(int n) {
 		/*
 		 * Total of n moves
 		 * The direction moved is decided by random according to the integer 
