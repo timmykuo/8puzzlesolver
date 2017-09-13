@@ -11,10 +11,21 @@ public class Puzzle {
 		current = goal;
 	}
 	
-    public setState(int[] state) {
-        current = state;
+    /**
+     *set current to input state 
+     */
+    public void setState(int[] state) {
+        int maxLength = 9;
+        if(state.length > maxLength) {
+            error("input state length can not be greater than goal state");
+        }
+        else {
+            current = state;
+        }
     }
-	//randomizes the puzzle with n moves
+	/**
+     *randomizes the puzzle with n moves
+     */
 	public void randomizeState(int n) {
 		/*
 		 * Total of n moves
@@ -268,45 +279,17 @@ public class Puzzle {
 		}
 	}
 	
-	public String toString() {
-		String string = new String(this.printLine(0) +
-								   this.printLine(1) +
-								   this.printLine(2));
-		return string;
-	}
-	
-	private String printLine(int n) {
+	public String printState(int n) {
 		StringBuilder s = new StringBuilder();
-		//toString row 1
-		if (n == 0) {
-			for(int i = 0; i <= 2; i++) {
-				if (i != 2)
-					s.append(getCurrent()[i] + " ");
-				else 
-					s.append(getCurrent()[i]);
-			}
-			s.append("\n");
-		}
-		//toString row 2
-		else if (n == 1) {
-			for(int i = 3; i <= 5; i++) {
-				if (i != 5)
-					s.append(getCurrent()[i] + " ");
-				else if (i == 5)
-					s.append(getCurrent()[i]);
-			}
-			s.append("\n");
-		}
-		//toString row 3
-		else if (n == 2) {
-			for(int i = 6; i <= 8; i++) {
-				if (i != 8)
-					s.append(getCurrent()[i] + " ");
-				else if (i == 8)
-					s.append(getCurrent()[i]);
-			}
-		}
-		String string = s.toString();
-		return string;
+        for(int i = 0; i < current.length; i++) {
+            if(current[i] = 0) {
+                s.add('b');
+            }
+            if(i % 3 == 0) {
+                s.add(' ');
+            }
+        }
+        
+        return s.toString();
 	}
 }
