@@ -3,9 +3,9 @@ import java.util.Stack;
 
 public class depthFirst {
 	
-	public static void search(int[] puzzle, int randomize) {
+	public static void search(char[] puzzle, int randomize) {
 		Puzzle p = new Puzzle(puzzle);
-		p.randomize(randomize);
+		p.randomizeState(randomize);
 		
 		puzzleNode root = new puzzleNode(p);
 		Stack<puzzleNode> stack = new Stack<puzzleNode>();
@@ -88,7 +88,7 @@ public class depthFirst {
 	}
 	
 	public static void main (String[] args) {
-		int[] test = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+		char[] test = {'b', 1, 2, 3, 4, 5, 6, 7, 8};
 		depthFirst.search(test, 100);
 	}
  }

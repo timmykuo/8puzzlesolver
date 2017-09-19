@@ -1,28 +1,74 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
 
 public class Puzzle {
 
-	private int[] goal = {0, 1, 2, 3, 4, 5, 6 ,7, 8};
-	private int[] current;
+	private char[] goal = {'b', 1, 2, 3, 4, 5, 6 ,7, 8};
+	private char[] current = new char[8];
     private int blankLoc;
-    
-    public enum Diection {
-        LEFT, RIGHT, UP, DOWN;
-    }
+    private int maxNodes;
+     
+	public int getMaxNodes() {
+		return maxNodes;
+	}
 	
-	public Puzzle() {
-		current = goal;
+	public void setMaxNodes(int max) {
+		maxNodes = max;
+	}
+    
+    public enum Direction {
+        LEFT, 
+        RIGHT, 
+        UP, 
+        DOWN, 
+        ERROR;
+
+		public static Direction getDirection(String string) {
+    		if(string == "up") {
+    			return Direction.UP;
+    		}
+    		else if(string == "right") {
+    			return Direction.RIGHT;
+    		}
+    		else if(string == "down") {
+    			return Direction.DOWN;
+    		}
+    		else if(string == "left") {
+    			return Direction.LEFT;
+    		}
+    		else {
+    			throw new IllegalArgumentException("Invalid direction");
+    		}
+		}
+    }
+    
+    public Puzzle() {
+    	for(int i = 0; i < current.length; i++) {
+    		current[i] = '0';
+    	}
+    	blankLoc = -1;
+    }
+    
+	public Puzzle(char[] state) {
+		current = state;
+		blankLoc = findBlank(current);
+	}
+	
+	private int findBlank(char[] state) {
+		for(int i = 0; i < state.length; i++) {
+			if(state[i] == '0') {
+				return i;
+			}
+		}
+		return -1;
 	}
 	
     /**
      *set current to input state 
      */
-    public void setState(int[] state) {
+    public void setState(char[] state) {
         int maxLength = 9;
         if(state.length > maxLength) {
-            error("input state length can not be greater than goal state");
+            new Error("input state length can not be greater than goal state");
         }
         else {
             current = state;
@@ -40,16 +86,16 @@ public class Puzzle {
 		for(int i = 0; i < n; i++) {
 			int blank = getBlank();
 			int location = new Random().nextInt(3);
-			if (chooseMove(blank, location) == "Up") {
+			if (chooseMove(blank, location) == Direction.UP) {
 				moveBlank(blank, blank-3);
 			}
-			if (chooseMove(blank, location) == "Right") {
+			if (chooseMove(blank, location) == Direction.RIGHT) {
 				moveBlank(blank, blank+1);
 			}
-			if (chooseMove(blank, location) == "Down") {
+			if (chooseMove(blank, location) == Direction.DOWN) {
 				moveBlank(blank, blank+3);
 			}
-			if (chooseMove(blank, location) == "Left") {
+			if (chooseMove(blank, location) == Direction.LEFT) {
 				moveBlank(blank, blank-1);
 			}
 		}
@@ -57,7 +103,21 @@ public class Puzzle {
     
     /*move the blank tile up, down, left, right */
     public void move(Direction d) {
-        
+    	switch(d) {
+    	case UP:
+        	if(blankLoc >= 0 && blankLoc <= 2) {
+        		
+        	}
+    		break;
+    	case DOWN:
+    		break;
+    	case RIGHT:
+    		break;
+    	case LEFT:
+    		break;
+    	default:
+    		break;
+    	}
     }
     
     /*returns -1 if no 0 in the array
@@ -75,7 +135,7 @@ public class Puzzle {
     
     //swaps the two elements at a and b in the array of p
     private void moveBlank(int a, int b) {
-        int temp = getCurrent()[a];
+        char temp = getCurrent()[a];
         getCurrent()[a] = getCurrent()[b];
         getCurrent()[b] = temp;
     }
@@ -86,107 +146,107 @@ public class Puzzle {
 	 * if location == 2, returns Down if it is a possible move
 	 * if location == 3, returns Left if it is a possible move
 	 */
-	private String chooseMove(int blank, int location) {
+	private Direction chooseMove(int blank, int location) {
 		//if in position 0, can move right/down
 		if (blank == 0) {
 			if (location == 0 || location == 1) {
-				return "Right";
+				return Direction.RIGHT;
 			}
 			if (location == 2 || location == 3) {
-				return "Down";
+				return Direction.DOWN;
 			}
 		}
 		//if in position 1, can move right/down/left
 		if (blank == 1) {
 			if (location == 0 || location == 1) {
-				return "Right";
+				return Direction.RIGHT;
 			}
 			if (location == 2) {
-				return "Down";
+				return Direction.DOWN;
 			}
 			if (location == 3) {
-				return "Left";
+				return Direction.LEFT;
 			}
 		}
 		//if in position 2, can move down/left
 		if (blank == 2) {
 			if (location == 0 || location == 2) {
-				return "Down";
+				return Direction.DOWN;
 			}
 			if (location == 1 || location == 3) {
-				return "Left";
+				return Direction.LEFT;
 			}
 		}
 		//if in position 3, can move up/right/down
 		if (blank == 3) {
 			if (location == 0 || location == 3) {
-				return "Up";
+				return Direction.UP;
 			}
 			if (location == 2) {
-				return "Down";
+				return Direction.DOWN;
 			}
 			if (location == 1) {
-				return "Right";
+				return Direction.RIGHT;
 			}
 		}
 		//if in position 4, can move up/right/down/left
 		if (blank == 4) {
 			if (location == 0) {
-				return "Up";
+				return Direction.UP;
 			}
 			if (location == 1) {
-				return "Right";
+				return Direction.RIGHT;
 			}
 			if (location == 2) {
-				return "Down";
+				return Direction.DOWN;
 			}
 			if (location == 3) {
-				return "Left";
+				return Direction.LEFT;
 			}
 		}
 		//if in position 5, can move up/down/left
 		if (blank == 5) {
 			if (location == 0 || location == 1) {
-				return "Up";
+				return Direction.UP;
 			}
 			if (location == 2) {
-				return "Down";
+				return Direction.DOWN;
 			}
 			if (location == 3) {
-				return "Left";
+				return Direction.LEFT;
 			}
 		}
 		//if in position 6, can move up/right
 		if (blank == 6) {
 			if (location == 0 || location == 2) {
-				return "Up";
+				return Direction.UP;
 			}
 			if (location == 1 || location == 3) {
-				return "Right";
+				return Direction.RIGHT;
 			}
 		}
 		//if in position 7, can move up/down/left
 		if (blank == 7) {
 			if (location == 0 || location == 2) {
-				return "Up";
+				return Direction.UP;
 			}
 			if (location == 1) {
-				return "Right";
+				return Direction.RIGHT;
 			}
 			if (location == 3) {
-				return "Left";
+				return Direction.LEFT;
 			}
 		}
 		//if in position 8, can move up/down/left
 		if (blank == 8) {
 			if (location == 0 || location == 1) {
-				return "Up";
+				return Direction.UP;
 			}
 			if (location == 2 || location == 3) {
-				return "Left";
+				return Direction.LEFT;
 			}
 		}
-		return "Incorrect input";
+		return Direction.ERROR;
 	}
 	
 	public ArrayList<Puzzle> getNextPuzzles() {
@@ -255,8 +315,8 @@ public class Puzzle {
 	/* Copys an int array of the input
 	 * Input should be an array of length 9
 	 */
-	private int[] copyPuzzle(int[] original) {
-		int[] copy = new int[9];
+	private char[] copyPuzzle(char[] original) {
+		char[] copy = new char[9];
 		for(int i = 0; i < copy.length; i++)
 			copy[i] = original[i];
 		
@@ -267,8 +327,8 @@ public class Puzzle {
 	 * and stores the new one into an ArrayList
 	 */
 	private void swap(int a, int b, ArrayList<Puzzle> puzzles) {
-		int[] copy = copyPuzzle(current);
-		int temp = copy[a];
+		char[] copy = copyPuzzle(current);
+		char temp = copy[a];
 		copy[a] = copy[b];
 		copy[b] = temp;
 		puzzles.add(new Puzzle(copy));
@@ -286,7 +346,7 @@ public class Puzzle {
 		}
 	}
 	
-	public int[] getCurrent() {
+	public char[] getCurrent() {
 		return current;
 	}
 	
@@ -302,14 +362,14 @@ public class Puzzle {
 		}
 	}
 	
-	public String printState(int n) {
+	public String printState() {
 		StringBuilder s = new StringBuilder();
         for(int i = 0; i < current.length; i++) {
-            if(current[i] = 0) {
-                s.add('b');
+            if(current[i] == 0) {
+                s.append('b');
             }
             if(i % 3 == 0) {
-                s.add(' ');
+                s.append(' ');
             }
         }
         
