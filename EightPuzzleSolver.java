@@ -1,13 +1,18 @@
-import java.lang.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class EightPuzzleSolver {
 	
 	private static Puzzle puzzle = new Puzzle();
 
-	public static void main(String args[]) {
+	public static void main(String args[]) throws FileNotFoundException {
 		if(args.length < 2) {
-			throw new IllegalArgumentException("Not enough arguments to run program");
+			args = getCommands(args[1]);
 		}
+		
 		for(int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			
@@ -31,12 +36,12 @@ public class EightPuzzleSolver {
 				}
 				break;
 			case "solve":
-				if(i+1 <= args.length && i+2 <= args.length && Character.isDigit(args[i+2].charAt(0))) {
+				if(i+1 <= args.length && i+2 <= args.length) {
 					if(args[i+1] == "A-star") {
-						AStarSearch.search(puzzle, Character.getNumericValue(args[i+2].charAt(0)));
+						AStarSearch.search(puzzle, args[i+2]);
 					}
 					else if(args[i+1] == "beam") {
-						//beamSearch.search(puzzle, Character.getNumericValue(args[i+2].charAt(0))));
+						beamSearch.search(puzzle, Character.getNumericValue(args[i+2].charAt(0)));
 					}
 				}
 				break;
@@ -47,8 +52,28 @@ public class EightPuzzleSolver {
 				break;
 			default: 
 				break;
-			//each command, add to options
 			}
 		}
+	}
+
+	private static String[] getCommands(String fileName) throws FileNotFoundException {
+		  if(fileName == null) {
+			  throw new IllegalArgumentException("file is null");
+		  }
+
+		   File file = new File(fileName);
+		   if(!(file.exists() && file.canRead())) {
+		      throw new FileNotFoundException("Cannot access file! Non-existent or read access restricted");
+		   }
+
+		   List<String> commands = new ArrayList<String>();
+		   Scanner scanner = new Scanner(file);
+		   while(scanner.hasNextLine()) {
+		      commands.add(scanner.nextLine());
+		   }
+
+		   scanner.close();
+		   String[] commandArray = new String[commands.size()];
+		   return commands.toArray(commandArray);
 	}
 }

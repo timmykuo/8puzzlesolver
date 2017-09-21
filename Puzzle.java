@@ -5,7 +5,19 @@ public class Puzzle {
 	private char[] goal = {'b', 1, 2, 3, 4, 5, 6 ,7, 8};
 	private char[] current = new char[8];
     private int blankLoc;
-    private int maxNodes;
+    private int maxNodes = 20;
+    
+    public Puzzle() {
+    	for(int i = 0; i < current.length; i++) {
+    		current[i] = '0';
+    	}
+    	blankLoc = -1;
+    }
+    
+	public Puzzle(char[] state) {
+		current = state;
+		blankLoc = findBlank(current);
+	}
      
 	public int getMaxNodes() {
 		return maxNodes;
@@ -16,10 +28,10 @@ public class Puzzle {
 	}
     
     public enum Direction {
-        LEFT, 
-        RIGHT, 
         UP, 
-        DOWN, 
+        DOWN,
+        LEFT, 
+        RIGHT,  
         ERROR;
 
 		public static Direction getDirection(String string) {
@@ -40,18 +52,6 @@ public class Puzzle {
     		}
 		}
     }
-    
-    public Puzzle() {
-    	for(int i = 0; i < current.length; i++) {
-    		current[i] = '0';
-    	}
-    	blankLoc = -1;
-    }
-    
-	public Puzzle(char[] state) {
-		current = state;
-		blankLoc = findBlank(current);
-	}
 	
 	private int findBlank(char[] state) {
 		for(int i = 0; i < state.length; i++) {
@@ -78,42 +78,60 @@ public class Puzzle {
      *randomizes the puzzle with n moves
      */
 	public void randomizeState(int n) {
-		/*
-		 * Total of n moves
-		 * The direction moved is decided by random according to the integer 
-		 * that is returned through the random function nextInt()
-		 */
 		for(int i = 0; i < n; i++) {
-			int blank = getBlank();
-			int location = new Random().nextInt(3);
-			if (chooseMove(blank, location) == Direction.UP) {
-				moveBlank(blank, blank-3);
-			}
-			if (chooseMove(blank, location) == Direction.RIGHT) {
-				moveBlank(blank, blank+1);
-			}
-			if (chooseMove(blank, location) == Direction.DOWN) {
-				moveBlank(blank, blank+3);
-			}
-			if (chooseMove(blank, location) == Direction.LEFT) {
-				moveBlank(blank, blank-1);
+			int direction = new Random().nextInt(3);
+			int prevBlank = blankLoc;
+			move(chooseMove(direction));
+			//if move failed, use the other direction
+			if(prevBlank == blankLoc) {
+				move(chooseMove(direction+1));
 			}
 		}
 	}
     
-    /*move the blank tile up, down, left, right */
+    private Direction chooseMove(int direction) {
+    	//if tried left and didn't work, return right
+    	if(direction > 3) {
+    		direction = 2;
+    	}
+    	switch(direction) {
+    	case 0:
+    		return Direction.UP;
+    	case 1:
+    		return Direction.DOWN;
+    	case 2:
+    		return Direction.RIGHT;
+    	case 3:
+    		return Direction.LEFT;
+    	default:
+    		return Direction.ERROR;
+    	}
+	}
+
+	/*move the blank tile up, down, left, right */
     public void move(Direction d) {
     	switch(d) {
     	case UP:
-        	if(blankLoc >= 0 && blankLoc <= 2) {
-        		
+    		//can't be on the top row
+        	if(blankLoc > 2) {
+        		moveBlank(blankLoc, blankLoc-3);
         	}
     		break;
     	case DOWN:
+    		//cant be on bottom row
+    		if(blankLoc > 5) {
+    			moveBlank(blankLoc, blankLoc+3);
+    		}
     		break;
     	case RIGHT:
+    		if(blankLoc % 3 == 0) {
+    			moveBlank(blankLoc, blankLoc+1);
+    		}
     		break;
     	case LEFT:
+    		if(blankLoc == 2 || blankLoc == 5 || blankLoc == 8) {
+    			moveBlank(blankLoc, blankLoc-1);
+    		}
     		break;
     	default:
     		break;
@@ -124,12 +142,7 @@ public class Puzzle {
      *meaning there is an error somewhere since
      *there should always be a 0
      */
-    private void setBlank() {
-        int location = -1;
-        for(int i = 0; i < current.length; i++) {
-            if (current[i] == 0)
-                location = i;
-        }
+    private void setBlank(int location) {
         blankLoc = location;
     }
     
@@ -138,137 +151,33 @@ public class Puzzle {
         char temp = getCurrent()[a];
         getCurrent()[a] = getCurrent()[b];
         getCurrent()[b] = temp;
+        setBlank(b);
     }
 	
-	/*returns a random direction, depending on location
-	 * if location == 0, returns Up if it is a possible move
-	 * if location == 1, returns Right if it is a possible move
-	 * if location == 2, returns Down if it is a possible move
-	 * if location == 3, returns Left if it is a possible move
-	 */
-	private Direction chooseMove(int blank, int location) {
-		//if in position 0, can move right/down
-		if (blank == 0) {
-			if (location == 0 || location == 1) {
-				return Direction.RIGHT;
-			}
-			if (location == 2 || location == 3) {
-				return Direction.DOWN;
-			}
-		}
-		//if in position 1, can move right/down/left
-		if (blank == 1) {
-			if (location == 0 || location == 1) {
-				return Direction.RIGHT;
-			}
-			if (location == 2) {
-				return Direction.DOWN;
-			}
-			if (location == 3) {
-				return Direction.LEFT;
-			}
-		}
-		//if in position 2, can move down/left
-		if (blank == 2) {
-			if (location == 0 || location == 2) {
-				return Direction.DOWN;
-			}
-			if (location == 1 || location == 3) {
-				return Direction.LEFT;
-			}
-		}
-		//if in position 3, can move up/right/down
-		if (blank == 3) {
-			if (location == 0 || location == 3) {
-				return Direction.UP;
-			}
-			if (location == 2) {
-				return Direction.DOWN;
-			}
-			if (location == 1) {
-				return Direction.RIGHT;
-			}
-		}
-		//if in position 4, can move up/right/down/left
-		if (blank == 4) {
-			if (location == 0) {
-				return Direction.UP;
-			}
-			if (location == 1) {
-				return Direction.RIGHT;
-			}
-			if (location == 2) {
-				return Direction.DOWN;
-			}
-			if (location == 3) {
-				return Direction.LEFT;
-			}
-		}
-		//if in position 5, can move up/down/left
-		if (blank == 5) {
-			if (location == 0 || location == 1) {
-				return Direction.UP;
-			}
-			if (location == 2) {
-				return Direction.DOWN;
-			}
-			if (location == 3) {
-				return Direction.LEFT;
-			}
-		}
-		//if in position 6, can move up/right
-		if (blank == 6) {
-			if (location == 0 || location == 2) {
-				return Direction.UP;
-			}
-			if (location == 1 || location == 3) {
-				return Direction.RIGHT;
-			}
-		}
-		//if in position 7, can move up/down/left
-		if (blank == 7) {
-			if (location == 0 || location == 2) {
-				return Direction.UP;
-			}
-			if (location == 1) {
-				return Direction.RIGHT;
-			}
-			if (location == 3) {
-				return Direction.LEFT;
-			}
-		}
-		//if in position 8, can move up/down/left
-		if (blank == 8) {
-			if (location == 0 || location == 1) {
-				return Direction.UP;
-			}
-			if (location == 2 || location == 3) {
-				return Direction.LEFT;
-			}
-		}
-		return Direction.ERROR;
-	}
-	
-	public ArrayList<Puzzle> getNextPuzzles() {
+	public HashMap<Puzzle, Puzzle.Direction> getNextPuzzles() {
 		//to store next possible puzzles
-		ArrayList<Puzzle> nextPuzzles = new ArrayList<Puzzle>();
+		HashMap<Puzzle, Puzzle.Direction> nextPuzzles = new HashMap<Puzzle, Puzzle.Direction>();
 		int blank = getBlank();
 		
 		//if not right edge, then you swap with right neighbor
 		if (blank != 2 && blank != 5 && blank != 8) {
-			swap(blank+1, blank, nextPuzzles);
+			move(Direction.RIGHT);
+			nextPuzzles.put(new Puzzle(current), Direction.RIGHT);
 		}
 		//if not bottom edge, then you can swap with bottom neighbor
-		if (blank != 6 && blank != 7 && blank != 8) {
-			swap(blank+3, blank, nextPuzzles);
+		if (blank < 6) {
+			move(Direction.DOWN);
+			nextPuzzles.put(new Puzzle(current), Direction.DOWN);
 		}
 		//if not left edge, then you can swap with left neighbor
-		if (blank != 0 && blank != 3 && blank != 6) {
-			swap(blank-1, blank, nextPuzzles);
+		if (blank % 3 != 0) {
+			move(Direction.LEFT);
+			nextPuzzles.put(new Puzzle(current), Direction.LEFT);
 		}
 		//if not top edge, then you can swap with top neighbor
-		if (blank != 0 && blank != 1 && blank != 2) {
-			swap(blank-3, blank, nextPuzzles);
+		if (blank > 2) {
+			move(Direction.UP);
+			nextPuzzles.put(new Puzzle(current), Direction.UP);
 		}
 		
 		return nextPuzzles;
@@ -362,17 +271,16 @@ public class Puzzle {
 		}
 	}
 	
-	public String printState() {
+	public void printState() {
 		StringBuilder s = new StringBuilder();
         for(int i = 0; i < current.length; i++) {
-            if(current[i] == 0) {
-                s.append('b');
-            }
-            if(i % 3 == 0) {
+            s.append(current[i]);
+            if(i == 2 || i == 5 || i == 8) {
                 s.append(' ');
             }
         }
-        
-        return s.toString();
+        s.append('\n');
+     
+        System.out.print(s.toString());
 	}
 }
