@@ -4,13 +4,15 @@ public class puzzleNode {
 	private Puzzle curPuzzle;
 	private puzzleNode parent;
 	private String operation;
-	private int fn;
+	private int hn;
+	private int gn;
 	
 	public puzzleNode(Puzzle puzzle) {
 		curPuzzle = puzzle;
 		parent = null;
 		operation = null;
-		fn = 0;
+		hn = 0;
+		gn = 0;
 	}
 	
 	//for BFS/DFS
@@ -21,11 +23,12 @@ public class puzzleNode {
 	}
 	
 	//for AStar/beam
-	public puzzleNode(Puzzle puzzle, puzzleNode prev, String operation, int fn) {
+	public puzzleNode(Puzzle puzzle, puzzleNode prev, String operation, String heuristic, int gn) {
 		curPuzzle = puzzle;
 		parent = prev;
 		this.operation = operation;
-		this.fn = fn;
+		this.hn = puzzle.getHeuristic(heuristic);
+		this.gn = gn;
 	}
 	
 	public puzzleNode getParent() {
@@ -41,6 +44,10 @@ public class puzzleNode {
 	}
 	
 	public int getFn() {
-		return fn;
+		return gn + hn;
+	}
+	
+	public int getGn() {
+		return gn;
 	}
 }
