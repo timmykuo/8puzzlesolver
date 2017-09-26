@@ -32,7 +32,6 @@ public class EightPuzzleSolver {
 				break;
 			case "randomizeState":
 				if(i+1 <= command.length && isNumeric(command[i+1])) {
-					System.out.println(Integer.parseInt(command[i+1]));
 					puzzle.randomizeState(Integer.parseInt(command[i+1]));
 				}
 				i++;
@@ -65,6 +64,11 @@ public class EightPuzzleSolver {
 					puzzle.setMaxNodes(Integer.parseInt(command[i+1]));
 				}
 				i++;
+				break;
+			case "read":
+				if(i+1 < command.length) {
+					
+				}
 				break;
 			default: 
 				System.out.println("Invalid command, try again.");

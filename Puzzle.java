@@ -138,6 +138,7 @@ public class Puzzle {
 		}
 	}
 	
+	//prevents the current move from counteracting the previous one
 	private boolean isCounterActive(Direction prev, Direction cur) {
 		if(prev == Direction.DOWN && cur == Direction.UP) {
 			return true;
@@ -173,13 +174,11 @@ public class Puzzle {
     public void move(Direction d) {
     	switch(d) {
     	case UP:
-    		//if blank is not on top row
         	if(!(blankLoc < 3)) {
         		moveBlank(blankLoc, blankLoc-3);
         	}
     		break;
     	case DOWN:
-    		//cant be on bottom row
     		if(!(blankLoc > 5)) {
     			moveBlank(blankLoc, blankLoc+3);
     		}
