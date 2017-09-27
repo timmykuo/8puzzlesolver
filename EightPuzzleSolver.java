@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -67,7 +70,7 @@ public class EightPuzzleSolver {
 				break;
 			case "read":
 				if(i+1 < command.length) {
-					
+					runFile(command[i+1]);
 				}
 				break;
 			default: 
@@ -77,28 +80,33 @@ public class EightPuzzleSolver {
 		}
 	}
 	
+	private static void runFile(String FILENAME) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		try {
+			//br = new BufferedReader(new FileReader(FILENAME));
+			fr = new FileReader(FILENAME);
+			br = new BufferedReader(fr);
+			String sCurrentLine;
+			while ((sCurrentLine = br.readLine()) != null) {
+				System.out.println(sCurrentLine);
+				doCommand(sCurrentLine);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+				if (fr != null)
+					fr.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	
 	private static boolean isNumeric(String s) {  
 	    return s != null && s.matches("[-+]?\\d*\\.?\\d+");  
 	}  
-
-	private static String[] getCommands(String fileName) throws FileNotFoundException {
-		  if(fileName == null) {
-			  throw new IllegalArgumentException("file is null");
-		  }
-
-		   File file = new File(fileName);
-		   if(!(file.exists() && file.canRead())) {
-		      throw new FileNotFoundException("Cannot access file! Non-existent or read access restricted");
-		   }
-
-		   List<String> commands = new ArrayList<String>();
-		   Scanner scanner = new Scanner(file);
-		   while(scanner.hasNextLine()) {
-		      commands.add(scanner.nextLine());
-		   }
-
-		   scanner.close();
-		   String[] commandArray = new String[commands.size()];
-		   return commands.toArray(commandArray);
-	}
 }

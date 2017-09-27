@@ -1,6 +1,7 @@
 import java.util.*;
 
 public abstract class puzzleSearch {
+	
 	protected static Comparator<puzzleNode> comparator = new Comparator<puzzleNode>() {
 		public int compare(puzzleNode i, puzzleNode j) {
 			if(i.getFn() < j.getFn()) {
@@ -58,15 +59,16 @@ public abstract class puzzleSearch {
 	protected static void printPath(LinkedList<puzzleNode> finished) {
 		puzzleNode goal = finished.getLast();
 		LinkedList<String> operations = new LinkedList<String>();
+		//store path operations
 		while(goal != null) {
 			operations.add(goal.getOperation());
 			goal = goal.getParent();
-			if(goal != null)
-			System.out.println(goal.getPuzzle().getState());
+			if(goal != null);
 		}
 		Iterator<String> iter = operations.descendingIterator();
-		//skip null step
+		//skip first null step
 		iter.next();
+		//print path
 		while(iter.hasNext()){
 		  System.out.print(iter.next());
 		  System.out.print(" -> ");

@@ -21,15 +21,13 @@ public class AStarSearch extends puzzleSearch{
 		boolean found = false;
 		//hold the state path to the solution
 		LinkedList<puzzleNode> pathToSol = new LinkedList<puzzleNode>();
-		//while still nodes to search and number of nodes is less than max
 		while(!q.isEmpty() && numNodes < root.getPuzzle().getMaxNodes() && !found) {
 			puzzleNode current = q.poll();
 			pathToSol.add(current);
 			if(current.getPuzzle().isGoal()) {
 				found = true;
 			}
-			//if found you can return because priority queue
-			//current's children states
+			//generate current's children states and place into queue as appropriate
 			HashMap<Puzzle, Puzzle.Direction> nextPuzzles = current.getPuzzle().getNextPuzzles();
 			for(Entry<Puzzle, Puzzle.Direction> entry : nextPuzzles.entrySet()) {
 				puzzleNode nextPuzzle = new puzzleNode(entry.getKey(), current, entry.getValue().getString(), heuristic, current.getGn()+1);

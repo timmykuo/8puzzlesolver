@@ -49,7 +49,6 @@ public class beamSearch extends puzzleSearch{
 			numNodes += states;
 		}
 		printResult(found, numNodes, root.getPuzzle().getMaxNodes(), explored, new Date().getTime() - startTime);
-		
 		//make a note that i'm only adding unique states because max num nodes easily reached
 		//not complete or optimal solution
 	}
