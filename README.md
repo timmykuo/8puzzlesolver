@@ -6,7 +6,8 @@ Both input variables for depth-first and breadth-first are an array of integers 
 
 Most recent addition to this program is A-star search and beam search. Both can be run through EightPuzzleSolver.java's class. Navigate to the directory through the command line and compile with 'javac EightPuzzleSolver.java' and run with 'java EightPuzzleSolver'.
 
-Available commands are:
+# Available commands
+
 setState <state> where state is a string of 9 characters that must contain b,1,2,3,4,5,6,7,8 where b represents the blank tile is
 
 randomizeState <n> where n is the number of random moves. Seed is set for 100 for testing purposes100
