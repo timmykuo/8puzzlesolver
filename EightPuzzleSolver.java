@@ -9,7 +9,7 @@ public class EightPuzzleSolver {
 	private static Puzzle puzzle = new Puzzle();
 
 	public static void main(String args[]){
-		compareSearches("h1", 10, 50);
+		//compareSearches("h1", 10, 50);
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Give me something to do");
 		
@@ -111,9 +111,9 @@ public class EightPuzzleSolver {
 		for(int i = 0; i < 100; i++) {
 			puzzle.setState(initial);
 			puzzle.randomizeState(i);
-			puzzle.setMaxNodes(200);
-			//AStarSearch.search(puzzle, "h2");
-			beamSearch.search(puzzle, 10);
+			puzzle.setMaxNodes(1500);
+			AStarSearch.search(puzzle, "h2");
+			//beamSearch.search(puzzle, 10);
 		}
 	}
 	

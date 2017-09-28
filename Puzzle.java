@@ -20,6 +20,14 @@ public class Puzzle {
 		}
 		blankLoc = findBlank();
 	}
+	
+	public char[] getState() {
+		return state;
+	}
+	
+	public char[] getGoal() {
+		return goal;
+	}
      
 	public int getMaxNodes() {
 		return maxNodes;
@@ -138,7 +146,8 @@ public class Puzzle {
      */
 	public void randomizeState(int n) {
 		int numMoves = 0;
-		Random rand = new Random();
+		//set seed
+		Random rand = new Random(100);
 		int direction;
 		while (numMoves < n) {
 			direction = rand.nextInt(4);
@@ -248,14 +257,6 @@ public class Puzzle {
 		else {
 			return false;
 		}
-	}
-	
-	public char[] getState() {
-		return state;
-	}
-	
-	public char[] getGoal() {
-		return goal;
 	}
 	
 	/*

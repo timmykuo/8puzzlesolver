@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Stack;
+import java.util.Map.Entry;
 
 public class depthFirst {
 	
@@ -65,14 +67,13 @@ public class depthFirst {
 			//if temp is not goal
 			else {
 				//stores next puzzles that can be formed from current puzzle
-				ArrayList<Puzzle> nextPuzzles = temp.getPuzzle().getNextPuzzles();
-				ArrayList<String> operations = temp.getPuzzle().getOperations();
+				LinkedHashMap<Puzzle, Puzzle.Direction> nextPuzzles = temp.getPuzzle().getNextPuzzles();
 				
 				//change puzzles in nextPuzzles to puzzleNodes and add them to the stack
-				for(int i = 0; i < nextPuzzles.size(); i++) {
-					puzzleNode newPNode = new puzzleNode(nextPuzzles.get(i),
+				for(Entry<Puzzle, Puzzle.Direction> entry : nextPuzzles.entrySet()) {
+					puzzleNode newPNode = new puzzleNode(entry.getKey(),
 														  temp, 
-														  operations.get(i));
+														  entry.getValue().getString());
 					//if repeat, then don't add it
 					if (!checkRepeat(newPNode)) 
 						stack.push(newPNode);

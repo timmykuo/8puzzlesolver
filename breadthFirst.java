@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -52,14 +55,13 @@ public class breadthFirst {
 			//temp is not goal, traverse
 			else {
 				//stores next puzzles that can be formed from current puzzle
-				ArrayList<Puzzle> nextPuzzles = temp.getPuzzle().getNextPuzzles();
-				ArrayList<String> operations = temp.getPuzzle().getOperations();
+				LinkedHashMap<Puzzle, Puzzle.Direction> nextPuzzles = temp.getPuzzle().getNextPuzzles();
 				
 				//change puzzles in nextPuzzles to puzzleNodes and add them to the stack
-				for(int i = 0; i < nextPuzzles.size(); i++) {
-					puzzleNode newPNode = new puzzleNode(nextPuzzles.get(i),
+				for(Entry<Puzzle, Puzzle.Direction> entry : nextPuzzles.entrySet()) {
+					puzzleNode newPNode = new puzzleNode(entry.getKey(),
 														  temp, 
-														  operations.get(i));
+														  entry.getValue().getString());
 					
 					if (!checkRepeat(newPNode)) //if repeat, then don't add it
 						q.add(newPNode);

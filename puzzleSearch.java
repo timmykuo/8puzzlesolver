@@ -21,7 +21,7 @@ public abstract class puzzleSearch {
 	};
 	
 	
-	//fix this later, duplicate code with isInqueue
+	//fix this, pretty similar functionality with isInQueue
 	protected static void replaceIfLowerCost(puzzleNode nextPuzzle, PriorityQueue<puzzleNode> q) {
 		Puzzle next = nextPuzzle.getPuzzle();
 		boolean replaced = false;
@@ -39,7 +39,7 @@ public abstract class puzzleSearch {
 	
 	protected static boolean isInQueue(puzzleNode nextPuzzle, Queue<puzzleNode> q) {
 		Puzzle next = nextPuzzle.getPuzzle();
-		//if next puzzle state already in queue and has greater fn, don't add
+		//if next puzzle state already in queue ret
 		for(puzzleNode p : q) {
 			Puzzle current = p.getPuzzle();
 			if(Arrays.equals(current.getState(), next.getState())) {
@@ -105,6 +105,7 @@ public abstract class puzzleSearch {
 		for(Integer n : nodes) {
 			totalNodes += n;
 		}
+		System.out.printf("Total number of runs: %d\n", times.size());
 		System.out.printf("Total number of successful runs: %d\n", 100-numFailed);
 		System.out.printf("Total milliseconds: %d\n", totalTime);
 		System.out.printf("Total nodes: %d\n", totalNodes);

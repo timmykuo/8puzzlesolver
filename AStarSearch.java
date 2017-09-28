@@ -9,12 +9,12 @@ public class AStarSearch extends puzzleSearch{
 		
 		q.add(root);
 		ASSearch(q, heuristic);
-		analyzeResult();
+		//analyzeResult();
 	}
 	
 	//possible heuristics
-	//number of misplaced tiles
-	//sum of distance of tiles from goal positions
+	//h1: number of misplaced tiles
+	//h2: sum of distance of tiles from goal positions
 	private static void ASSearch(PriorityQueue<puzzleNode> q, String heuristic) {
 		long startTime = System.currentTimeMillis();
 		puzzleNode root = q.peek();
@@ -43,13 +43,6 @@ public class AStarSearch extends puzzleSearch{
 			}
 		}
 		printResult(found, numNodes, root.getPuzzle().getMaxNodes(), pathToSol, new Date().getTime() - startTime);
-		addData(numNodes, root.getPuzzle().getMaxNodes(), new Date().getTime() - startTime);
-	}
-	
-	public static void main(String[] args) {
-		char[] temp = {'1', '4', '2', '3', '7', 'b', '6', '8', '5'};
-		Puzzle puzzle = new Puzzle(temp);
-		search(puzzle, "h2");
-		
+		//addData(numNodes, root.getPuzzle().getMaxNodes(), new Date().getTime() - startTime);
 	}
 }
