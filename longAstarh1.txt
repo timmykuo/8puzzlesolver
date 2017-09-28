@@ -1,0 +1,4 @@
+setState b13245678
+maxNodes 181440
+printState
+solve A-star h1

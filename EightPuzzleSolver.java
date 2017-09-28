@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class EightPuzzleSolver {
@@ -12,13 +9,12 @@ public class EightPuzzleSolver {
 	private static Puzzle puzzle = new Puzzle();
 
 	public static void main(String args[]){
-		String input = "";
+		compareSearches("h1", 10, 50);
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Give me something to do");
 		
-		while(!input.equals("exit")) {
-			input = scanner.nextLine();
-			doCommand(input);
+		while(scanner.hasNext()) {
+			doCommand(scanner.nextLine());
 		}
 		scanner.close();
 	}
@@ -72,7 +68,10 @@ public class EightPuzzleSolver {
 				if(i+1 < command.length) {
 					runFile(command[i+1]);
 				}
+				i++;
 				break;
+			case "exit":
+				System.exit(1);
 			default: 
 				System.out.println("Invalid command, try again.");
 				break;
@@ -103,6 +102,18 @@ public class EightPuzzleSolver {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
+		}
+	}
+	
+	//manually change heuristics, maxnodes, etc to compare searches
+	private static void compareSearches(String h, int states, int maxNodes) {
+		char[] initial= {'b', '1', '2', '3', '4', '5', '6', '7' ,'8'};
+		for(int i = 0; i < 100; i++) {
+			puzzle.setState(initial);
+			puzzle.randomizeState(i);
+			puzzle.setMaxNodes(200);
+			//AStarSearch.search(puzzle, "h2");
+			beamSearch.search(puzzle, 10);
 		}
 	}
 	

@@ -10,6 +10,7 @@ public class beamSearch extends puzzleSearch{
 		q.add(root);
 		
 		bSearch(q, states, startTime);
+		analyzeResult();
 	}
 	
 	private static PriorityQueue<puzzleNode> getFirstKStates(Queue<puzzleNode> q, int states) {
@@ -49,7 +50,6 @@ public class beamSearch extends puzzleSearch{
 			numNodes += states;
 		}
 		printResult(found, numNodes, root.getPuzzle().getMaxNodes(), explored, new Date().getTime() - startTime);
-		//make a note that i'm only adding unique states because max num nodes easily reached
-		//not complete or optimal solution
+		addData(numNodes, root.getPuzzle().getMaxNodes(), new Date().getTime() - startTime);
 	}
 }

@@ -2,6 +2,10 @@ import java.util.*;
 
 public abstract class puzzleSearch {
 	
+	private static LinkedList<Integer> nodes = new LinkedList<>();
+	private static LinkedList<Long> times = new LinkedList<>();
+	private static LinkedList<Boolean> failed = new LinkedList<>();
+	
 	protected static Comparator<puzzleNode> comparator = new Comparator<puzzleNode>() {
 		public int compare(puzzleNode i, puzzleNode j) {
 			if(i.getFn() < j.getFn()) {
@@ -18,7 +22,7 @@ public abstract class puzzleSearch {
 	
 	
 	//fix this later, duplicate code with isInqueue
-	protected static void replaceIfLowerCost(puzzleNode nextPuzzle, Queue<puzzleNode> q) {
+	protected static void replaceIfLowerCost(puzzleNode nextPuzzle, PriorityQueue<puzzleNode> q) {
 		Puzzle next = nextPuzzle.getPuzzle();
 		boolean replaced = false;
 		//if next puzzle state already in queue and has greater fn, don't add
@@ -74,6 +78,36 @@ public abstract class puzzleSearch {
 		  System.out.print(" -> ");
 		}
 		System.out.println("complete");
+	}
+	
+	protected static void addData(int numNodes, int maxNodes, long time) {
+		if(numNodes >= maxNodes) {
+			failed.add(true);
+		}
+		else {
+			nodes.add(numNodes);
+			failed.add(false);
+		}
+		times.add(time);
+	}
+	
+	protected static void analyzeResult() {
+		int numFailed = 0;
+		for(Boolean b : failed){
+			if(b == true)
+				numFailed++;
+		}
+		long totalTime = 0;
+		for(Long i : times) {
+			totalTime += i;
+		}
+		long totalNodes = 0;
+		for(Integer n : nodes) {
+			totalNodes += n;
+		}
+		System.out.printf("Total number of successful runs: %d\n", 100-numFailed);
+		System.out.printf("Total milliseconds: %d\n", totalTime);
+		System.out.printf("Total nodes: %d\n", totalNodes);
 	}
 	
 	protected static void printResult(boolean found, int numNodes, int maxNodes, LinkedList<puzzleNode> explored, long time) {

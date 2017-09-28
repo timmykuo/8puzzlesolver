@@ -5,7 +5,7 @@ public class Puzzle {
 	private char[] goal = {'b', '1', '2', '3', '4', '5', '6' ,'7', '8'};
 	private char[] state = new char[9];
     private int blankLoc;
-    private int maxNodes = 20;
+    private int maxNodes = 100;
     
     public Puzzle() {
     	for(int i = 0; i < state.length; i++) {
@@ -59,7 +59,7 @@ public class Puzzle {
 				diff = i;
 			}
 			else {
-				diff = Math.abs(Character.getNumericValue(state[i]) - i - 1);
+				diff = Math.abs(Character.getNumericValue(state[i]) - i);
 			}
 			//num rows + columns
 			dist += diff/3 + diff%3;
@@ -74,10 +74,10 @@ public class Puzzle {
         RIGHT ("right"),  
         ERROR ("error");
     	
-    	private String value;
+    	private String string;
     	
     	Direction(String string) {
-    		this.value = string;
+    		this.string = string;
     	}
 
 		public static Direction getDirection(String string) {
@@ -99,8 +99,23 @@ public class Puzzle {
 		}
 		
 		public String getString() {
-			return this.value;
+			return this.string;
 		}
+		
+	    public static Direction chooseMove(int direction) {
+	    	switch(direction) {
+	    	case 0:
+	    		return Direction.UP;
+	    	case 1:
+	    		return Direction.RIGHT;
+	    	case 2:
+	    		return Direction.DOWN;
+	    	case 3:
+	    		return Direction.LEFT;
+	    	default:
+	    		return Direction.ERROR;
+	    	}
+	    }
     }
 	
     /**
@@ -124,50 +139,12 @@ public class Puzzle {
 	public void randomizeState(int n) {
 		int numMoves = 0;
 		Random rand = new Random();
-		int direction = rand.nextInt(3-0+1);
-		Puzzle.Direction prevDir = chooseMove(direction);
+		int direction;
 		while (numMoves < n) {
-			direction = rand.nextInt(3-0+1);
-			Puzzle.Direction currDir = chooseMove(direction);
-			//if successful move
-			if(!(isCounterActive(prevDir, currDir))) {
-				move(currDir);
-				prevDir = currDir;
-				numMoves++;
-			}
+			direction = rand.nextInt(4);
+			move(Direction.chooseMove(direction));
+			numMoves++;
 		}
-	}
-	
-	//prevents the current move from counteracting the previous one
-	private boolean isCounterActive(Direction prev, Direction cur) {
-		if(prev == Direction.DOWN && cur == Direction.UP) {
-			return true;
-		}
-		if(prev == Direction.UP && cur == Direction.DOWN) {
-			return true;
-		}
-		if(prev == Direction.LEFT && cur == Direction.RIGHT) {
-			return true;
-		}
-		if(prev == Direction.RIGHT && cur == Direction.LEFT) {
-			return true;
-		}
-		return false;
-	}
-    
-    private Direction chooseMove(int direction) {
-    	switch(direction) {
-    	case 0:
-    		return Direction.UP;
-    	case 1:
-    		return Direction.RIGHT;
-    	case 2:
-    		return Direction.DOWN;
-    	case 3:
-    		return Direction.LEFT;
-    	default:
-    		return Direction.ERROR;
-    	}
 	}
 
 	/*move the blank tile up, down, left, right */
@@ -219,9 +196,9 @@ public class Puzzle {
         setBlank(b);
     }
 	
-	public HashMap<Puzzle, Puzzle.Direction> getNextPuzzles() {
+	public LinkedHashMap<Puzzle, Puzzle.Direction> getNextPuzzles() {
 		//to store next possible puzzles
-		HashMap<Puzzle, Puzzle.Direction> nextPuzzles = new HashMap<>();
+		LinkedHashMap<Puzzle, Puzzle.Direction> nextPuzzles = new LinkedHashMap<>();
 		
 		//if not right edge, then you swap with right neighbor
 		if (blankLoc != 2 && blankLoc != 5 && blankLoc != 8) {

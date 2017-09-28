@@ -1,5 +1,5 @@
 setState 1b2345678
-randomizeState 30
+randomizeState 50
 maxNodes 10000
 printState
 solve A-star h1
